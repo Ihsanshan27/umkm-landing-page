@@ -1,0 +1,123 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  body {
+    @apply bg-dark-950 text-dark-100 font-sans antialiased selection:bg-brand-500 selection:text-white;
+  }
+}
+
+/* === Glassmorphism Classes === */
+.glass {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* === Admin Light Theme Override === */
+/* Aktif via class 'admin-light' di root DashboardLayout */
+.admin-light {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.admin-light .glass {
+  background: rgba(255, 255, 255, 0.80) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Sidebar */
+.admin-light aside {
+  background: rgba(248, 250, 252, 0.95) !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Card & section backgrounds */
+.admin-light .bg-slate-950,
+[class~="admin-light"] .bg-slate-950\/60,
+[class~="admin-light"] .bg-slate-950\/40,
+[class~="admin-light"] .bg-slate-950\/80 {
+  background-color: #ffffff !important;
+}
+
+.admin-light .bg-slate-900 { background-color: #f8fafc !important; }
+.admin-light .bg-slate-800 { background-color: #f1f5f9 !important; }
+
+/* Text */
+.admin-light .text-white { color: #0f172a !important; }
+.admin-light .text-slate-100 { color: #1e293b !important; }
+.admin-light .text-slate-200 { color: #334155 !important; }
+.admin-light .text-slate-300 { color: #475569 !important; }
+.admin-light .text-slate-400 { color: #64748b !important; }
+.admin-light .text-slate-500 { color: #94a3b8 !important; }
+
+/* Borders */
+.admin-light .border-slate-800,
+.admin-light .border-slate-700 { border-color: #e2e8f0 !important; }
+.admin-light .border-white\/5,
+.admin-light .border-white\/10 { border-color: #e2e8f0 !important; }
+
+/* Inputs */
+.admin-light input,
+.admin-light textarea,
+.admin-light select {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.admin-light input::placeholder,
+.admin-light textarea::placeholder { color: #94a3b8 !important; }
+
+/* === Carousel Snap Scroll === */
+.carousel-snap {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  gap: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.carousel-snap::-webkit-scrollbar { height: 4px; }
+.carousel-snap::-webkit-scrollbar-track { background: transparent; }
+.carousel-snap::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+.carousel-snap > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* === Animations === */
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.animate-zoom-in { animation: zoomIn 0.2s ease-out both; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fadeIn 0.25s ease-out both; }
+
+/* === Custom Scrollbar === */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #090d16; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #22c55e; }

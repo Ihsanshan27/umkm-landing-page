@@ -1,0 +1,202 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  OWNER
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  CONVERTED
+  REJECTED
+}
+
+enum DomainStatus {
+  PENDING
+  ACTIVE
+  FAILED
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  name      String
+  role      Role      @default(OWNER)
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  business  Business?
+}
+
+model Business {
+  id             String       @id @default(uuid())
+  userId         String       @unique
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name           String
+  category       String
+  description    String?
+  address        String?
+  googleMapsUrl  String?
+  whatsappNumber String
+  whatsappTemplate String?    // Global kustom template pesan WA
+  showWhatsAppOrder Boolean   @default(true) // Menampilkan tombol Pesan via WA
+  email          String?
+  logo           String?
+  openHours      String?
+  instagram      String?
+  tiktok         String?
+  facebook       String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  landingPage    LandingPage?
+}
+
+model LandingPage {
+  id             String           @id @default(uuid())
+  businessId     String           @unique
+  business       Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  slug           String           @unique
+  themeColor     String?          @default("EMERALD")
+  allowAdminEdit Boolean          @default(false)
+  customNavItems Json?            @default("[]")
+  catalogLayout  Int              @default(1)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  heroSection    HeroSection?
+  aboutSection   AboutSection?
+  products       ProductService[]
+  galleryItems   GalleryItem[]
+  testimonials   Testimonial[]
+  leads          Lead[]
+  seoSetting     SeoSetting?
+  domainSetting  DomainSetting?
+  analytics      Analytics?
+  customSections CustomSection[]
+}
+
+model HeroSection {
+  id            String      @id @default(uuid())
+  landingPageId String      @unique
+  landingPage   LandingPage @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
+  title         String
+  subtitle      String?
+  imageUrl      String?
+  ctaText       String      @default("Hubungi Kami")
+  ctaLink       String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model AboutSection {
+  id            String      @id @default(uuid())
+  landingPageId String      @unique
+  landingPage   LandingPage @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
+  title         String      @default("Tentang Kami")
+  description   String
+  imageUrl      String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model ProductService {
+  id            String      @id @default(uuid())
+  landingPageId String
+  landingPage   LandingPage @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
+  name          String
+  description   String?
+  price         Float?
+  imageUrl      String?
+  isActive      Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model GalleryItem {
+  id            String      @id @default(uuid())
+  landingPageId String
+  landingPage   LandingPage @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
+  imageUrl      String
+  caption       String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Testimonial {
+  id            String      @id @default(uuid())
+  landingPageId String
+  landingPage   LandingPage @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
+  name          String
+  content       String
+  avatarUrl     String?
+  rating        Int?        @default(5)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Lead {
+  id            String      @id @default(uuid())
+  landingPageId String
+  landingPage   LandingPage @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
+  name          String
+  whatsappNumber String
+  email         String?
+  message       String
+  status        LeadStatus  @default(NEW)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model SeoSetting {
+  id            String      @id @default(uuid())
+  landingPageId String      @unique
+  landingPage   LandingPage @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
+  metaTitle     String?
+  metaDescription String?
+  metaKeywords  String?
+  ogImage       String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model DomainSetting {
+  id            String       @id @default(uuid())
+  landingPageId String       @unique
+  landingPage   LandingPage  @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
+  customDomain  String       @unique
+  status        DomainStatus @default(PENDING)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Analytics {
+  id            String      @id @default(uuid())
+  landingPageId String      @unique
+  landingPage   LandingPage @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
+  views         Int         @default(0)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model CustomSection {
+  id            String      @id @default(uuid())
+  landingPageId String
+  landingPage   LandingPage @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
+  title         String
+  content       String      @db.Text
+  imageUrl      String?
+  order         Int         @default(0)
+  sectionId     String      // Anchor ID (misal: "menus")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([landingPageId])
+}

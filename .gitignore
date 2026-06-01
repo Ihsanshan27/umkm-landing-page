@@ -1,0 +1,91 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build / Distribution directories
+/*/dist/
+/*/build/
+.next/
+out/
+.docusaurus/
+.vuepress/dist/
+.serverless/
+.fusebox/
+.dynamodb/
+
+# Frontend / Vite outputs
+frontend/dist/
+frontend/build/
+
+# Backend / NestJS outputs
+backend/dist/
+backend/build/
+
+# TypeScript
+*.tsbuildinfo
+
+# Debug logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data / SQLite / Prisma local databases
+*.db
+*.db-journal
+*.sqlite
+*.sqlite-journal
+backend/prisma/*.db
+backend/prisma/*.sqlite
+
+# Environment variables & local configurations
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.backup
+backend/.env
+frontend/.env
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Editors / IDEs configs
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary files
+.tmp/
+temp/
+tmp/
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+
+# Docker
+.docker/
+docker-compose.override.yml
